@@ -7,8 +7,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Observable;
 
-public abstract class AbstractNmeaCodec{
+public abstract class AbstractNmeaCodec extends Observable{
 
 	protected AbstractNmeaObject object;
 	protected String[] format;
