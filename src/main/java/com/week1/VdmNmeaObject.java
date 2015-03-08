@@ -36,10 +36,13 @@ public class VdmNmeaObject extends AbstractNmeaObject {
 	}
 
 	public Integer getSerialNo() {
+		if(this.serialNo == null){
+			this.serialNo = 0;
+		}
 		return serialNo;
 	}
 
-	public void setSerialNo(Object serialNo) {
+	public void setSerialNo(Object serialNo) {		
 		this.serialNo = (Integer)serialNo;
 	}
 
@@ -57,6 +60,12 @@ public class VdmNmeaObject extends AbstractNmeaObject {
 
 	public void setPad(Object pad) {
 		this.pad = (Integer)pad;
+	}
+	
+	
+	public void concatenate(VdmNmeaObject newSen) {	
+		this.current++;
+		this.content.concat(newSen.content);
 	}
 
 

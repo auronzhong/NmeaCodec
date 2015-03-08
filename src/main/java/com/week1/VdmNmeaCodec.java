@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 
 public class VdmNmeaCodec extends AbstractNmeaCodec {
 	
-
+	private SentenceStore sentenceStore = new SentenceStore();
 	private AisMessage message;
 
 
@@ -26,9 +26,14 @@ public class VdmNmeaCodec extends AbstractNmeaCodec {
 			InstantiationException {
 		super.decode(content);
 		
-		message = new AisMessage1();
+		VdmNmeaObject obj = (VdmNmeaObject)object;
 		
-		decodeContent(object.getContent(),message.getContentFormat());
+		this.object = sentenceStore.addItem(obj.getSerialNo(), obj);
+		
+		if(this.object != null){		
+			message = new AisMessage1();		
+			decodeContent(object.getContent(),message.getContentFormat());
+		}
 	}
 
 	private void decodeContent(String content,String[] contentFormat) throws IllegalAccessException,
