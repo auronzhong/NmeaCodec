@@ -6,8 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SentenceStore {
-	private HashMap<Integer, VdmNmeaObject> storedSentences = new HashMap<Integer, VdmNmeaObject>();
+	
+	public HashMap<Integer, VdmNmeaObject> storedSentences;
 
+	public SentenceStore(){
+		this.storedSentences = new HashMap<Integer, VdmNmeaObject>();
+	}
+	
 	public List<VdmNmeaObject> getExpiredItems(Date checkTime, int milliSeconds) {
 		
 		List<VdmNmeaObject> result = new ArrayList<VdmNmeaObject>();
@@ -38,7 +43,7 @@ public class SentenceStore {
 	}
 
 	
-	public VdmNmeaObject addItem(int key, VdmNmeaObject value) {
+	public VdmNmeaObject addItem(Integer key, VdmNmeaObject value) {
 		if(value.getTotal() == 1){
 			return value;
 		}

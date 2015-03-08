@@ -37,7 +37,7 @@ public class VdmNmeaObject extends AbstractNmeaObject {
 
 	public Integer getSerialNo() {
 		if(this.serialNo == null){
-			this.serialNo = 0;
+			this.serialNo = -1;
 		}
 		return serialNo;
 	}
@@ -65,7 +65,7 @@ public class VdmNmeaObject extends AbstractNmeaObject {
 	
 	public void concatenate(VdmNmeaObject newSen) {	
 		this.current++;
-		this.content.concat(newSen.content);
+		this.content = this.content.concat(newSen.getContent());
 	}
 
 

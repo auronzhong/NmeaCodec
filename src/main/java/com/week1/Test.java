@@ -29,7 +29,9 @@ public class Test {
 		//input = "GPGGA,092204.999,4250.5589,S,14718.5084,E,1,04,24.4,19.7,M,,,,0000";
 		//input = "GPRMC,161229.487,A,3723.2475,N,12158.3416,W,0.13,309.62,120598,,0";
 		//input = "AIVDM,1,1,,B,16:>>s5Oh08dLO8AsMAVqptj0@>p,0";
-		input = "$GPGGA,092204.999,4250.5589,S,14718.5084,E,1,04,24.4,19.7,M,,,,0000";
+		input = "GPGGA,092204.999,4250.5589,S,14718.5084,E,1,04,24.4,19.7,M,,,,0000";
+		input = "AIVDM,2,1,,B,16:>>s5Oh08dLO8As,0";
+		input = "AIVDM,2,2,,B,MAVqptj0@>p,0";
 		try {
 			System.out.println(test.getCheckSum(input));
 		} catch (UnsupportedEncodingException e1) {

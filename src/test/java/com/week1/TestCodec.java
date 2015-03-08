@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.Date;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestCodec {
@@ -60,6 +61,35 @@ public class TestCodec {
 		VdmNmeaCodec codec = new VdmNmeaCodec();
 		try {
 			codec.decode("!AIVDM,1,1,,B,16:>>s5Oh08dLO8AsMAVqptj0@>p,0*67");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// 获取解析文本
+		try {
+			for (String result : codec.encode(codec.object)) {
+				System.out.println(result);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// 获取解码后文本
+		AisMessage1 obj = (AisMessage1) codec.getObject();
+
+		try {
+			String result = codec.encodeContest(obj, obj.getContentFormat());
+			System.out.println(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testVdmCodec2() {
+		VdmNmeaCodec codec = new VdmNmeaCodec();
+		try {
+			codec.decode("!AIVDM,2,1,,B,16:>>s5Oh08dLO8As,0*1F");
+			codec.decode("!AIVDM,2,2,,B,MAVqptj0@>p,0*5E");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
