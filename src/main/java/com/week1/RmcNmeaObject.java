@@ -4,16 +4,38 @@ import java.util.Date;
 
 public class RmcNmeaObject extends AbstractNmeaObject {
 
+
+    @SentenceField(order = 1,fieldType = "hhmmss.ss")
 	private Date UTC;
+
+    @SentenceField(order = 2,fieldType = "a")
 	private String status;
+
+    @SentenceField(order = 3,fieldType = "llll.ll")
 	private Double latitude;
+
+    @SentenceField(order = 4,fieldType = "a")
 	private String NSIndicator;
+
+    @SentenceField(order = 5,fieldType = "yyyyy.yy")
 	private double longitude;
+
+    @SentenceField(order = 6,fieldType = "a")
 	private String EWIndicator;
+
+    @SentenceField(order = 7,fieldType = "x.x")
 	private double speedOverGround;
+
+    @SentenceField(order = 8,fieldType = "x.x")
 	private double courseOverGround;
+
+    @SentenceField(order = 9,fieldType = "ddmmyy")
 	private Date date;
+
+    @SentenceField(order = 10,fieldType = "x.x")
 	private double magneticVariation;
+
+    @SentenceField(order = 11,fieldType = "a")
 	private String mode;
 
 	@Override

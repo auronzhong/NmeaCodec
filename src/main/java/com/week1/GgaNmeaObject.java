@@ -3,19 +3,48 @@ package com.week1;
 import java.util.Date;
 
 public class GgaNmeaObject extends AbstractNmeaObject {
-	private Date UTC;
+
+
+    @SentenceField(order = 1,fieldType = "hhmmss.ss")
+    private Date UTC;
+
+    @SentenceField(order = 2,fieldType = "llll.ll")
 	private double latitude;
+
+    @SentenceField(order = 3,fieldType = "a")
 	private String NSIndicator;
+
+    @SentenceField(order = 4,fieldType = "yyyyy.yy")
 	private double longitude;
+
+    @SentenceField(order = 5,fieldType = "a")
 	private String EWIndicator;
+
+    @SentenceField(order = 6,fieldType = "a")
 	private String positionFixIndicator;
+
+    @SentenceField(order = 7,fieldType = "aa")
 	private String satellitesUsed;
+
+    @SentenceField(order = 8,fieldType = "x.x")
 	private Double HDOP;
+
+    @SentenceField(order = 9,fieldType = "x.x")
 	private Double MSLAltitude;
+
+    @SentenceField(order = 10,fieldType = "a")
 	private String mUnits;
+
+    @SentenceField(order = 11,fieldType = "x.x")
 	private Double geoidSeparation;
+
+    @SentenceField(order = 12,fieldType = "a")
 	private String gUnits;
+
+    @SentenceField(order = 13,fieldType = "x.x")
 	private Double ageOfDiffCorr;
+
+    @SentenceField(order = 14,fieldType = "a")
 	private String diffRefStationID;
 	
 	@Override

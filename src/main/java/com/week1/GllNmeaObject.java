@@ -3,13 +3,27 @@ package com.week1;
 import java.util.Date;
 
 public class GllNmeaObject extends AbstractNmeaObject {
-	
-	private Date UTC;
-	private String status;
+
+
+    @SentenceField(order = 1,fieldType = "yyyyy.yy")
 	private Double latitude;
+
+    @SentenceField(order = 2,fieldType = "a")
 	private String NSIndicator;
+
+    @SentenceField(order = 3,fieldType = "llll.ll")
 	private double longitude;
+
+    @SentenceField(order = 4,fieldType = "a")
 	private String EWIndicator;
+
+    @SentenceField(order = 5,fieldType = "hhmmss.ss")
+    private Date UTC;
+
+    @SentenceField(order = 6,fieldType = "a")
+    private String status;
+
+    @SentenceField(order = 7,fieldType = "a")
 	private String mode;
 
 	@Override

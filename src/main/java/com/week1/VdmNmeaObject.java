@@ -1,14 +1,24 @@
 package com.week1;
 
 public class VdmNmeaObject extends AbstractNmeaObject {
-	
 
-	
-	private Integer total;
+
+    @SentenceField(order = 1,fieldType = "x")
+    private Integer total;
+
+    @SentenceField(order = 2,fieldType = "x")
 	private Integer current;
+
+    @SentenceField(order = 3,fieldType = "x")
 	private Integer serialNo;
+
+    @SentenceField(order = 4,fieldType = "a")
 	private String channel;
-	
+
+    @SentenceField(order = 5,fieldType = "s--s")
+    private String content;
+
+    @SentenceField(order = 6,fieldType = "x")
 	private Integer pad;
 	
 	
@@ -68,5 +78,12 @@ public class VdmNmeaObject extends AbstractNmeaObject {
 		this.content = this.content.concat(newSen.getContent());
 	}
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(Object content) {
+        this.content = (String) content;
+    }
 
 }

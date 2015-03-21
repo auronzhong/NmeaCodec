@@ -26,13 +26,11 @@ public class VdmNmeaCodec extends AbstractNmeaCodec {
 				try {
 					check();
 				} catch (Exception e) {
-
+                    e.printStackTrace();
 				}
 			}
 		}, INIT_DELAY, CHECK_INTERVAL);
 
-		format = new String[] { "", "total:x", "current:x", "serialNo:x",
-				"channel:a", "content:s--s", "pad:x" };
 	}
 
 	protected void check() throws ClassNotFoundException,
@@ -74,7 +72,7 @@ public class VdmNmeaCodec extends AbstractNmeaCodec {
 
 		if (this.object != null) {
 			message = new AisMessage1();
-			decodeContent(object.getContent(), message.getContentFormat());
+			decodeContent(((VdmNmeaObject)object).getContent(), message.getContentFormat());
 		}
 	}
 
@@ -83,21 +81,21 @@ public class VdmNmeaCodec extends AbstractNmeaCodec {
 			InvocationTargetException, InstantiationException {
 
 		int position = 0;
-		for (int i = 0; i < contentFormat.length; i++) {
-			String field = contentFormat[i].split(":")[0];
-			int offset = Integer.parseInt(contentFormat[i].split(":")[1]);
+        for (String aContentFormat : contentFormat) {
+            String field = aContentFormat.split(":")[0];
+            int offset = Integer.parseInt(aContentFormat.split(":")[1]);
 
-			Integer value = Integer.valueOf(
-					content.substring(position, position + offset), 2);
+            Integer value = Integer.valueOf(
+                    content.substring(position, position + offset), 2);
 
-			for (Method m : message.getClass().getMethods()) {
-				if (m.getName().toLowerCase()
-						.equals("set" + field.toLowerCase())) {
-					m.invoke(message, value);
-				}
-			}
-			position += offset;
-		}
+            for (Method m : message.getClass().getMethods()) {
+                if (m.getName().toLowerCase()
+                        .equals("set" + field.toLowerCase())) {
+                    m.invoke(message, value);
+                }
+            }
+            position += offset;
+        }
 	}
 
 	public static void main(String[] args) {
