@@ -10,7 +10,6 @@ import java.util.*;
 public abstract class AbstractNmeaCodec extends Observable {
 
     protected AbstractNmeaObject object;
-    protected String[] format;
 
     public AbstractNmeaObject getObject() {
         return object;
@@ -34,22 +33,6 @@ public abstract class AbstractNmeaCodec extends Observable {
         }
 
         String[] datas = input.split(",");
-
-//        for (int i = 1; i < format.length; i++) {
-//            String field = format[i].split(":")[0];
-//            String pattern = format[i].split(":")[1];
-//
-//            for (Method m : object.getClass().getMethods()) {
-//                if (m.getName().toLowerCase()
-//                        .equals("set" + field.toLowerCase())) {
-//                    if (i >= datas.length) {
-//                        m.invoke(object, parse("", pattern));
-//                    } else {
-//                        m.invoke(object, parse(datas[i], pattern));
-//                    }
-//                }
-//            }
-//        }
 
         List<Field> annotatedFields = AbstractNmeaCodec.getSentenceFields(object);
 
@@ -116,17 +99,6 @@ public abstract class AbstractNmeaCodec extends Observable {
         List<Field> annotatedFields = AbstractNmeaCodec.getSentenceFields(object);
 
         String result = "";
-//        for (int i = 1; i < format.length; i++) {
-//            String field = format[i].split(":")[0];
-//            String pattern = format[i].split(":")[1];
-//            for (Method m : obj.getClass().getMethods()) {
-//                if (m.getName().toLowerCase()
-//                        .equals("get" + field.toLowerCase())) {
-//                    result += ",";
-//                    result += build(m.invoke(obj), pattern);
-//                }
-//            }
-//        }
 
         for (Field field : annotatedFields) {
 
