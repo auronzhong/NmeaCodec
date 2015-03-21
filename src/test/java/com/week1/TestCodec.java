@@ -3,8 +3,6 @@ package com.week1;
 import static org.junit.Assert.*;
 
 import java.util.Date;
-
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestCodec {
@@ -14,11 +12,11 @@ public class TestCodec {
 		
 		String input = "010298";
 		Date c = (Date) AbstractNmeaCodec.parse(input, "ddmmyy");
-		assertEquals((String) AbstractNmeaCodec.build(c, "ddmmyy"), input);
+		assertEquals(AbstractNmeaCodec.build(c, "ddmmyy"), input);
 		
 		input = "092204.999";
 		c = (Date) AbstractNmeaCodec.parse(input, "hhmmss.ss");
-		assertEquals((String) AbstractNmeaCodec.build(c, "hhmmss.ss"), input);
+		assertEquals(AbstractNmeaCodec.build(c, "hhmmss.ss"), input);
 
 	}
 
