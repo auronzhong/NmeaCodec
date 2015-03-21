@@ -1,29 +1,56 @@
 package com.week1;
 
 public class AisMessage1 extends AisMessage {
+
+    @MessageField(order = 1,requiredBits = 6)
 	private Integer messageID;
+
+    @MessageField(order = 2,requiredBits = 2)
 	private Integer repeatIndicator;
+
+    @MessageField(order = 3,requiredBits = 30)
 	private Integer userID;
+
+    @MessageField(order = 4,requiredBits = 4)
 	private Integer navigationalStatus;
+
+    @MessageField(order = 5,requiredBits = 8)
 	private double rateOfTurn;
+
+    @MessageField(order = 6,requiredBits = 10)
 	private Integer SOG;
+
+    @MessageField(order = 7,requiredBits = 1)
 	private Integer positionAccuracy;
+
+    @MessageField(order = 8,requiredBits = 28)
 	private double longitude;
+
+    @MessageField(order = 9,requiredBits = 27)
 	private double latitude;
+
+    @MessageField(order = 10,requiredBits = 12)
 	private double COG;
+
+    @MessageField(order = 11,requiredBits = 9)
 	private Integer trueHeading;
+
+    @MessageField(order = 12,requiredBits = 6)
 	private Integer timeStamp;
+
+    @MessageField(order = 13,requiredBits = 2)
 	private Integer specialManoeuvreIndicator;
+
+    @MessageField(order = 14,requiredBits = 3)
 	private Integer spare;
+
+    @MessageField(order = 15,requiredBits = 1)
 	private Integer raimFlag;
+
+    @MessageField(order = 16,requiredBits = 19)
 	private Integer communicationState;
 
 	public AisMessage1() {
-		this.contentFormat = new String[] { "messageID:6", "repeatIndicator:2",
-				"userID:30", "navigationalStatus:4", "rateOfTurn:8", "SOG:10",
-				"positionAccuracy:1", "longitude:28", "latitude:27", "COG:12",
-				"trueHeading:9", "timeStamp:6", "specialManoeuvreIndicator:2",
-				"spare:3", "raimFlag:1", "communicationState:19" };
 	}
 
 	public Integer getMessageID() {

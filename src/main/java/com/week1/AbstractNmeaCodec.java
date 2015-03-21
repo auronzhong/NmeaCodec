@@ -21,7 +21,6 @@ public abstract class AbstractNmeaCodec extends Observable {
             InstantiationException {
 
 
-
         String input = content.split("\\*")[0];
         String checkSum = content.split("\\*")[1];
         try {
@@ -73,21 +72,41 @@ public abstract class AbstractNmeaCodec extends Observable {
         return annotatedFields;
     }
 
+    static public List<Field> getMessageFields(AbstractNmeaObject sentence) {
 
-    protected String encodeContest(AbstractNmeaObject obj, String[] format)
+        List<Field> annotatedFields = new ArrayList<Field>();
+        for (Field field : sentence.getClass().getDeclaredFields()) {
+            if (field.isAnnotationPresent(MessageField.class)) {
+                annotatedFields.add(field);
+            }
+        }
+
+        Collections.sort(annotatedFields, new MessageFieldAnnotationSorter());
+        return annotatedFields;
+    }
+
+
+    protected String encodeContest(AbstractNmeaObject obj)
             throws IllegalAccessException, IllegalArgumentException,
             InvocationTargetException {
+
+        List<Field> annotatedFields = AbstractNmeaCodec.getMessageFields(obj);
+
+
         String result = "";
-        for (int i = 0; i < format.length; i++) {
-            String field = format[i].split(":")[0];
+
+        int i = 0;
+        for (Field field : annotatedFields) {
+
             for (Method m : obj.getClass().getMethods()) {
                 if (m.getName().toLowerCase()
-                        .equals("get" + field.toLowerCase())) {
+                        .equals("get" + field.getName().toLowerCase())) {
                     if (i > 0)
                         result += ",";
                     result += m.invoke(obj);
                 }
             }
+            i++;
         }
         return result;
     }
