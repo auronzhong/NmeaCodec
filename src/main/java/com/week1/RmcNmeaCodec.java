@@ -7,4 +7,8 @@ public class RmcNmeaCodec extends AbstractNmeaCodec {
 	}
 
 
+    @Override
+    public void postDecode() {
+
+    }
 }

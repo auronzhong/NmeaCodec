@@ -15,6 +15,9 @@ public class VdmNmeaCodec extends AbstractNmeaCodec {
     private Timer checkTimer;
 
     public VdmNmeaCodec() {
+
+        this.object = new VdmNmeaObject();
+
         this.checkTimer = new Timer(true);
         this.sentenceStore = new SentenceStore();
         this.checkTimer.scheduleAtFixedRate(new TimerTask() {
@@ -62,14 +65,17 @@ public class VdmNmeaCodec extends AbstractNmeaCodec {
         this.object = new VdmNmeaObject();
 
         super.decode(content);
+    }
 
+    @Override
+    public void postDecode() throws IllegalAccessException, InstantiationException, InvocationTargetException {
         VdmNmeaObject obj = (VdmNmeaObject) this.object;
 
-        this.object = this.sentenceStore.addItem(obj.getSerialNo(), obj);
+        obj = this.sentenceStore.addItem(obj.getSerialNo(), obj);
 
-        if (this.object != null) {
+        if (obj != null) {
             message = new AisMessage1();
-            decodeContent(((VdmNmeaObject) object).getContent());
+            decodeContent(obj.getContent());
         }
     }
 

@@ -56,8 +56,10 @@ public abstract class AbstractNmeaCodec extends Observable {
             i++;
         }
 
-
+        postDecode();
     }
+
+    abstract public void postDecode() throws IllegalAccessException, InstantiationException, InvocationTargetException;
 
     static public List<Field> getSentenceFields(AbstractNmeaObject sentence) {
 
@@ -149,16 +151,14 @@ public abstract class AbstractNmeaCodec extends Observable {
             throws UnsupportedEncodingException {
         int output = 0;
         byte[] bytes = input.getBytes("ASCII");
-        for (int i = 0; i < bytes.length; i++) {
-            output = output ^ (int) bytes[i];
+        for (byte aByte : bytes) {
+            output = output ^ (int) aByte;
         }
         String result = leftPad(Integer.toBinaryString(output), 8);
         // System.out.println(result);
-        return Integer.toHexString(Integer.valueOf(result.substring(0, 4), 2))
-                .toString().toUpperCase()
+        return Integer.toHexString(Integer.valueOf(result.substring(0, 4), 2)).toUpperCase()
                 + Integer
-                .toHexString(Integer.valueOf(result.substring(4, 8), 2))
-                .toString().toUpperCase();
+                .toHexString(Integer.valueOf(result.substring(4, 8), 2)).toUpperCase();
 
     }
 
@@ -290,7 +290,7 @@ public abstract class AbstractNmeaCodec extends Observable {
         double seconds = Double.parseDouble(new DecimalFormat("#.####")
                 .format(temp * 60 - (int) (temp * 60)));
         double minutes = (int) (temp * 60) % 60;
-        double degree = (int) ((int) (temp * 60) / 60);
+        double degree = (int) (temp * 60) / 60;
 
         return Double.toString(degree * 100 + minutes + seconds);
     }
