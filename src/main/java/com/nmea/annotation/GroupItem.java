@@ -6,15 +6,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by zhongwei on 15/3/21.
+ * Created by zhongwei on 15/3/22.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
-public @interface MessageField {
+public @interface GroupItem {
 
-    int requiredBits();
+    String fieldType() default "";
 
     int order();
 
+    String itemType();
 
 }

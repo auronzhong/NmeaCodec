@@ -58,6 +58,12 @@ public class TestCodec {
     }
 
     @Test
+    public void testGsvCodec() {
+        testCodec(new GsvNmeaCodec(),
+                "$GPGSV,2,1,07,07,79,048,42,02,51,062,43,26,36,256,42,27,27,138,42*71");
+    }
+
+    @Test
     public void testVdmCodec() {
         VdmNmeaCodec codec = new VdmNmeaCodec();
         try {

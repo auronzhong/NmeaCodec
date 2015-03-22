@@ -1,10 +1,8 @@
 package com.nmea.codec;
 
-import com.nmea.annotation.MessageField;
-import com.nmea.annotation.MessageFieldAnnotationSorter;
-import com.nmea.annotation.SentenceField;
-import com.nmea.annotation.SentenceFieldAnnotationSorter;
+import com.nmea.annotation.*;
 import com.nmea.sentence.AbstractNmeaObject;
+import com.nmea.sentence.ChannelInfo;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -24,7 +22,7 @@ public abstract class AbstractNmeaCodec extends Observable {
 
     public void decode(String content) throws IllegalAccessException,
             IllegalArgumentException, InvocationTargetException,
-            InstantiationException {
+            InstantiationException, ClassNotFoundException {
 
 
         String input = content.split("\\*")[0];
@@ -47,22 +45,60 @@ public abstract class AbstractNmeaCodec extends Observable {
 
             SentenceField annotation = field.getAnnotation(SentenceField.class);
 
-
-            for (Method m : object.getClass().getMethods()) {
-                if (m.getName().toLowerCase()
-                        .equals("set" + field.getName().toLowerCase())) {
-                    if (i >= datas.length) {
-                        m.invoke(object, parse("", annotation.fieldType()));
-                    } else {
-                        m.invoke(object, parse(datas[i], annotation.fieldType()));
+            if (!annotation.isGroup()) {
+                for (Method m : object.getClass().getMethods()) {
+                    if (m.getName().toLowerCase()
+                            .equals("set" + field.getName().toLowerCase())) {
+                        if (i >= datas.length) {
+                            m.invoke(object, parse("", annotation.fieldType()));
+                        } else {
+                            m.invoke(object, parse(datas[i++], annotation.fieldType()));
+                        }
                     }
                 }
+
+
+            } else {
+
+                List<Field> groupFields = AbstractNmeaCodec.getGroupItems(Class.forName(annotation.groupItemClass()));
+
+                a:
+                while (true) {
+
+                    AbstractNmeaObject obj = (AbstractNmeaObject) Class.forName(annotation.groupItemClass()).newInstance();
+
+                    for (Field groupField : groupFields) {
+                        GroupItem groupAnnotation = groupField.getAnnotation(GroupItem.class);
+
+                        for (Method m : obj.getClass().getMethods()) {
+                            if (m.getName().toLowerCase()
+                                    .equals("set" + groupField.getName().toLowerCase())) {
+                                if (i >= datas.length) {
+                                    break a;
+                                } else {
+                                    m.invoke(obj, parse(datas[i++], groupAnnotation.fieldType()));
+                                }
+                            }
+                        }
+
+                    }
+
+                    for (Method m : object.getClass().getMethods()) {
+                        if (m.getName().toLowerCase()
+                                .equals("set" + field.getName().toLowerCase())) {
+                            m.invoke(object, obj);
+                        }
+                    }
+
+                }
+
             }
 
-            i++;
+
         }
 
         postDecode();
+
     }
 
     abstract public void postDecode() throws IllegalAccessException, InstantiationException, InvocationTargetException;
@@ -90,6 +126,19 @@ public abstract class AbstractNmeaCodec extends Observable {
         }
 
         Collections.sort(annotatedFields, new MessageFieldAnnotationSorter());
+        return annotatedFields;
+    }
+
+    static public List<Field> getGroupItems(Class cls) {
+
+        List<Field> annotatedFields = new ArrayList<Field>();
+        for (Field field : cls.getDeclaredFields()) {
+            if (field.isAnnotationPresent(GroupItem.class)) {
+                annotatedFields.add(field);
+            }
+        }
+
+        Collections.sort(annotatedFields, new GroupItemAnnotationSorter());
         return annotatedFields;
     }
 
@@ -138,6 +187,8 @@ public abstract class AbstractNmeaCodec extends Observable {
                     result += build(m.invoke(obj), annotation.fieldType());
                 }
             }
+
+
         }
 
         ArrayList<String> results = new ArrayList<String>();

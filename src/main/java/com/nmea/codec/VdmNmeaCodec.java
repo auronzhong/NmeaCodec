@@ -67,7 +67,7 @@ public class VdmNmeaCodec extends AbstractNmeaCodec {
     @Override
     public void decode(String content) throws IllegalAccessException,
             IllegalArgumentException, InvocationTargetException,
-            InstantiationException {
+            InstantiationException, ClassNotFoundException {
 
         this.object = new VdmNmeaObject();
 
