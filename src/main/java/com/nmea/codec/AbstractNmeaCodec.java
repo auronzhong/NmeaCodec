@@ -2,7 +2,6 @@ package com.nmea.codec;
 
 import com.nmea.annotation.*;
 import com.nmea.sentence.AbstractNmeaObject;
-import com.nmea.sentence.ChannelInfo;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -46,15 +45,12 @@ public abstract class AbstractNmeaCodec extends Observable {
             SentenceField annotation = field.getAnnotation(SentenceField.class);
 
             if (!annotation.isGroup()) {
-                for (Method m : object.getClass().getMethods()) {
-                    if (m.getName().toLowerCase()
-                            .equals("set" + field.getName().toLowerCase())) {
-                        if (i >= datas.length) {
-                            m.invoke(object, parse("", annotation.fieldType()));
-                        } else {
-                            m.invoke(object, parse(datas[i++], annotation.fieldType()));
-                        }
-                    }
+                Method m = fetchSetMethod(object.getClass(), field.getName());
+
+                if (i >= datas.length) {
+                    m.invoke(object, parse("", annotation.fieldType()));
+                } else {
+                    m.invoke(object, parse(datas[i++], annotation.fieldType()));
                 }
 
 
@@ -64,31 +60,23 @@ public abstract class AbstractNmeaCodec extends Observable {
 
                 a:
                 while (true) {
+                    int lastIter = i;
 
                     AbstractNmeaObject obj = (AbstractNmeaObject) Class.forName(annotation.groupItemClass()).newInstance();
 
                     for (Field groupField : groupFields) {
                         GroupItem groupAnnotation = groupField.getAnnotation(GroupItem.class);
 
-                        for (Method m : obj.getClass().getMethods()) {
-                            if (m.getName().toLowerCase()
-                                    .equals("set" + groupField.getName().toLowerCase())) {
-                                if (i >= datas.length) {
-                                    break a;
-                                } else {
-                                    m.invoke(obj, parse(datas[i++], groupAnnotation.fieldType()));
-                                }
-                            }
-                        }
-
-                    }
-
-                    for (Method m : object.getClass().getMethods()) {
-                        if (m.getName().toLowerCase()
-                                .equals("set" + field.getName().toLowerCase())) {
-                            m.invoke(object, obj);
+                        if (i >= datas.length) {
+                            i = lastIter;
+                            break a;
+                        } else {
+                            fetchSetMethod(obj.getClass(), groupField.getName()).invoke(obj, parse(datas[i++], groupAnnotation.fieldType()));
                         }
                     }
+
+                    fetchSetMethod(object.getClass(), field.getName()).invoke(object, obj);
+
 
                 }
 
@@ -99,6 +87,26 @@ public abstract class AbstractNmeaCodec extends Observable {
 
         postDecode();
 
+    }
+
+    private Method fetchGetMethod(Class cls, String FieldName) {
+        for (Method m : cls.getMethods()) {
+            if (m.getName().toLowerCase()
+                    .equals("get" + FieldName.toLowerCase())) {
+                return m;
+            }
+        }
+        return null;
+    }
+
+    private Method fetchSetMethod(Class cls, String FieldName) {
+        for (Method m : cls.getMethods()) {
+            if (m.getName().toLowerCase()
+                    .equals("set" + FieldName.toLowerCase())) {
+                return m;
+            }
+        }
+        return null;
     }
 
     abstract public void postDecode() throws IllegalAccessException, InstantiationException, InvocationTargetException;
@@ -155,14 +163,11 @@ public abstract class AbstractNmeaCodec extends Observable {
         int i = 0;
         for (Field field : annotatedFields) {
 
-            for (Method m : obj.getClass().getMethods()) {
-                if (m.getName().toLowerCase()
-                        .equals("get" + field.getName().toLowerCase())) {
-                    if (i > 0)
-                        result += ",";
-                    result += m.invoke(obj);
-                }
+            if (i > 0) {
+                result += ",";
             }
+            result += fetchGetMethod(obj.getClass(), field.getName()).invoke(obj);
+
             i++;
         }
         return result;
@@ -180,13 +185,8 @@ public abstract class AbstractNmeaCodec extends Observable {
 
             SentenceField annotation = field.getAnnotation(SentenceField.class);
 
-            for (Method m : obj.getClass().getMethods()) {
-                if (m.getName().toLowerCase()
-                        .equals("get" + field.getName().toLowerCase())) {
-                    result += ",";
-                    result += build(m.invoke(obj), annotation.fieldType());
-                }
-            }
+            result += ",";
+            result += build(fetchGetMethod(obj.getClass(), field.getName()).invoke(obj), annotation.fieldType());
 
 
         }
