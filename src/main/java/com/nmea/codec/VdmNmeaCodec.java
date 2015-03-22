@@ -1,10 +1,7 @@
 package com.nmea.codec;
 
 import com.nmea.annotation.MessageField;
-import com.nmea.sentence.AbstractNmeaObject;
-import com.nmea.sentence.AisMessage;
-import com.nmea.sentence.AisMessage1;
-import com.nmea.sentence.VdmNmeaObject;
+import com.nmea.sentence.*;
 import com.nmea.util.SentenceStore;
 
 import java.lang.reflect.Field;
@@ -81,9 +78,24 @@ public class VdmNmeaCodec extends AbstractNmeaCodec {
         obj = this.sentenceStore.addItem(obj.getSerialNo(), obj);
 
         if (obj != null) {
-            message = new AisMessage1();
+            int messageId = getMessageId(obj.getContent());
+
+            if (messageId == 1) {
+                message = new AisMessage1();
+            }
+            else if (messageId == 5) {
+                message = new AisMessage5();
+            }
+            else {
+                return;
+            }
+
             decodeContent(obj.getContent());
         }
+    }
+
+    public AisMessage getMessage(){
+        return this.message;
     }
 
 
@@ -109,6 +121,12 @@ public class VdmNmeaCodec extends AbstractNmeaCodec {
             }
             position += annotation.requiredBits();
         }
+    }
+
+    private int getMessageId(String content) {
+
+        return Integer.valueOf(
+                content.substring(0, 6), 2);
     }
 
 }

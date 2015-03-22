@@ -157,7 +157,6 @@ public abstract class AbstractNmeaCodec extends Observable {
 
         List<Field> annotatedFields = AbstractNmeaCodec.getMessageFields(obj);
 
-
         String result = "";
 
         int i = 0;
