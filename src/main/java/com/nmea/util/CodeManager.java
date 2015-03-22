@@ -1,82 +1,59 @@
 package com.nmea.util;
 
-import com.nmea.codec.*;
+import com.nmea.codec.AbstractNmeaCodec;
 import com.nmea.sentence.AbstractNmeaObject;
-import com.nmea.util.Buffer;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Observable;
 
 public class CodeManager extends Observable {
 
-	private Buffer buffer = new Buffer();
-	
-	private VdmNmeaCodec vdmCodec = new VdmNmeaCodec();
+    private BeanFactory bf;
 
-	public void decode(String content) {
+    private Buffer buffer = new Buffer();
 
-		ArrayList<String> strings = buffer.appendContent(content);
+    public CodeManager() {
+        bf = new ClassPathXmlApplicationContext("applicationContext.xml");
+    }
 
-		for (String string : strings) {
-			try {
-				AbstractNmeaCodec codec = null;
+    public void decode(String content) {
 
-				// GGA
-				if (string.substring(3, 6) == "GGA") {
-					codec = new GgaNmeaCodec();
-				}
-				// RMC
-				if (string.substring(3, 6) == "RMC") {
-					codec = new RmcNmeaCodec();
-				}
-				// GLL
-				if (string.substring(3, 6) == "GLL") {
-					codec = new GllNmeaCodec();
-				}
-				// VDM
-				if (string.substring(3, 6) == "VDM") {
-					codec = vdmCodec;
-				}
-				else{
-					throw new Exception("error type");
-				}
-				codec.decode(string);
-				
-				//通知观察者
-				if(codec.getObject() instanceof AbstractNmeaObject){
-					this.setChanged();
-					this.notifyObservers(codec.getObject());
-				}
-				
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			
-		}
-	}
+        ArrayList<String> strings = buffer.appendContent(content);
 
-	public ArrayList<String> encode(AbstractNmeaObject obj) {
-		try {
-			AbstractNmeaCodec codec = null;
-			if (obj.getClass().getName().toUpperCase().contains("GGA")) {
-				codec = new GgaNmeaCodec();
-			}
-			if (obj.getClass().getName().toUpperCase().contains("RMC")) {
-				codec = new RmcNmeaCodec();
-			}
-			if (obj.getClass().getName().toUpperCase().contains("GLL")) {
-				codec = new GllNmeaCodec();
-			}else{
-				throw new Exception("error type");
-			}
-			return codec.encode(obj);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        for (String string : strings) {
+            try {
 
-		return null;
-	}
+                AbstractNmeaCodec codec = (AbstractNmeaCodec) bf.getBean(string.substring(3, 6));
+
+                codec.decode(string);
+
+                //通知观察者
+                if (codec.getObject() instanceof AbstractNmeaObject) {
+                    this.setChanged();
+                    this.notifyObservers(codec.getObject());
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    }
+
+    public ArrayList<String> encode(AbstractNmeaObject obj) {
+        try {
+            AbstractNmeaCodec codec = (AbstractNmeaCodec) bf.getBean(obj.getClass().getName().toUpperCase().substring(0, 3));
+            return codec.encode(obj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
 }

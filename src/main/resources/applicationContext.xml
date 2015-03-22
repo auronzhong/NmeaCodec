@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+	<bean id="GGA" class="com.nmea.codec.GgaNmeaCodec" />
+
+	<bean id="RMC" class="com.nmea.codec.RmcNmeaCodec" />
+
+	<bean id="GLL" class="com.nmea.codec.GllNmeaCodec" />
+
+    <bean id="GSV" class="com.nmea.codec.GsvNmeaCodec" />
+
+    <bean id="VDM" class="com.nmea.codec.VdmNmeaCodec" />
+
+
+</beans>
