@@ -72,7 +72,7 @@ public class VdmNmeaCodec extends AbstractNmeaCodec {
     }
 
     @Override
-    public void postDecode() throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    public void postDecode() throws IllegalAccessException, InstantiationException, InvocationTargetException, ClassNotFoundException {
         VdmNmeaObject obj = (VdmNmeaObject) this.object;
 
         obj = this.sentenceStore.addItem(obj.getSerialNo(), obj);
@@ -80,21 +80,14 @@ public class VdmNmeaCodec extends AbstractNmeaCodec {
         if (obj != null) {
             int messageId = getMessageId(obj.getContent());
 
-            if (messageId == 1) {
-                message = new AisMessage1();
-            }
-            else if (messageId == 5) {
-                message = new AisMessage5();
-            }
-            else {
-                return;
-            }
+            message = (AisMessage) Class.forName("com.nmea.sentence.AisMessage" + messageId).newInstance();
+
 
             decodeContent(obj.getContent());
         }
     }
 
-    public AisMessage getMessage(){
+    public AisMessage getMessage() {
         return this.message;
     }
 

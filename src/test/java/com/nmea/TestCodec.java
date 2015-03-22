@@ -111,7 +111,7 @@ public class TestCodec {
             e.printStackTrace();
         }
         // 获取解码后文本
-        AisMessage1 obj = (AisMessage1) codec.getObject();
+        AisMessage1 obj = (AisMessage1) codec.getMessage();
 
         try {
             String result = codec.encodeContest(obj);

@@ -109,7 +109,7 @@ public abstract class AbstractNmeaCodec extends Observable {
         return null;
     }
 
-    abstract public void postDecode() throws IllegalAccessException, InstantiationException, InvocationTargetException;
+    abstract public void postDecode() throws IllegalAccessException, InstantiationException, InvocationTargetException, ClassNotFoundException;
 
     static public List<Field> getSentenceFields(AbstractNmeaObject sentence) {
 
