@@ -3,7 +3,6 @@ package com.nmea.util;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.Objects;
 
 /**
  * Created by zhongwei on 15/4/4.

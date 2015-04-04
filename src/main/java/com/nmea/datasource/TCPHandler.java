@@ -3,9 +3,7 @@ package com.nmea.datasource;
 import com.nmea.util.CodeManager;
 import com.nmea.util.Factory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -25,23 +23,41 @@ public class TCPHandler implements Runnable {
             BufferedReader inFromClient;
             inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            Scanner s = new Scanner(inFromClient);
-            s.useDelimiter("\n");
-            while (s.hasNext()) {
-                ((CodeManager)Factory.getBean("CodeManager")).decode(s.toString());
-                s.next();
-            }
-
+            doDecode(inFromClient);
 
             socket.shutdownInput();
             socket.close();
 
             TCPDataSource.productQueue.take();
 
-        } catch (IOException|InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private void doDecode(BufferedReader inFromClient) throws IOException {
+
+        String s;
+
+        while ((s = inFromClient.readLine()) != null) {
+            ((CodeManager) Factory.getBean("CodeManager")).decode(s);
+        }
+
+    }
+
+    public static void main(String[] args){
+        try {
+            FileReader in = new FileReader("src/test/test.txt");
+            BufferedReader read=new BufferedReader(in);
+            TCPHandler tcpHandler = new TCPHandler(new Socket());
+            tcpHandler.doDecode(read);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }
