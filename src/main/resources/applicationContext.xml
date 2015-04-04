@@ -15,5 +15,7 @@
 
     <bean id="VDM" class="com.nmea.codec.VdmNmeaCodec" />
 
+    <bean id="CodeManager" class="com.nmea.util.CodeManager" />
+
 
 </beans>
