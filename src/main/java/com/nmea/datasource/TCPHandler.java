@@ -1,9 +1,12 @@
 package com.nmea.datasource;
 
+import com.nmea.codec.AbstractNmeaCodec;
+import com.nmea.codec.GllNmeaCodec;
 import com.nmea.util.CodeManager;
 import com.nmea.util.Factory;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -36,7 +39,7 @@ public class TCPHandler implements Runnable {
 
     }
 
-    private void doDecode(BufferedReader inFromClient) throws IOException {
+    public void doDecode(BufferedReader inFromClient) throws IOException {
 
         String s;
 
@@ -46,18 +49,4 @@ public class TCPHandler implements Runnable {
 
     }
 
-    public static void main(String[] args){
-        try {
-            FileReader in = new FileReader("src/test/test.txt");
-            BufferedReader read=new BufferedReader(in);
-            TCPHandler tcpHandler = new TCPHandler(new Socket());
-            tcpHandler.doDecode(read);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 }
