@@ -17,5 +17,6 @@
 
     <bean id="CodeManager" class="com.nmea.util.CodeManager" />
 
+    <bean id="TCPHandlerAkkaSystem" class="com.nmea.datasource.TCPHandlerAkkaSystem" />
 
 </beans>
