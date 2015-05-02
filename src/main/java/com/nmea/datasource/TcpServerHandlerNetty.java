@@ -10,13 +10,13 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-public class TcpServerHandler extends ChannelInboundHandlerAdapter {
+public class TcpServerHandlerNetty extends ChannelInboundHandlerAdapter {
 
     private ActorRef remoteActor;
 
     private ChannelHandlerContext context;
 
-    public TcpServerHandler(ActorRef remoteActor) {
+    public TcpServerHandlerNetty(ActorRef remoteActor) {
         this.remoteActor = remoteActor;
     }
 

@@ -15,13 +15,13 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 
 import java.net.InetSocketAddress;
 
-public class TcpServerDataSource {
+public class TcpServerDataSourceNetty {
 
-    private TcpServerHandler handler;
+    private TcpServerHandlerNetty handler;
 
-    public TcpServerDataSource() {
+    public TcpServerDataSourceNetty() {
         TCPHandlerAkkaSystem system = (TCPHandlerAkkaSystem) Factory.getBean("TCPHandlerAkkaSystem");
-        this.handler = new TcpServerHandler(system.getActor());
+        this.handler = new TcpServerHandlerNetty(system.getActor());
     }
 
     public void run() {
