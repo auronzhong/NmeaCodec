@@ -36,6 +36,11 @@
             <artifactId>netty-all</artifactId>
             <version>4.0.14.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.zeromq</groupId>
+            <artifactId>jeromq</artifactId>
+            <version>0.3.4</version>
+        </dependency>
 
 
     </dependencies>

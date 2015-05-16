@@ -1,9 +1,14 @@
 package com.nmea.util;
 
+import akka.actor.ActorRef;
 import com.nmea.codec.AbstractNmeaCodec;
+import com.nmea.datasource.TCPHandlerAkkaSystem;
 import com.nmea.sentence.AbstractNmeaObject;
+import org.zeromq.ZMQ;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -27,6 +32,11 @@ public class CodeManager extends Observable {
                 if (codec.getObject() instanceof AbstractNmeaObject) {
                     this.setChanged();
                     this.notifyObservers(codec.getObject());
+
+
+                    ActorRef remoteActor = ((CodeManagerActorSystem) Factory.getBean("CodeManagerActorSystem")).getActor();
+                    remoteActor.tell(codec, null);
+
                 }
 
 

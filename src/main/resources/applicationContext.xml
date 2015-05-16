@@ -19,4 +19,6 @@
 
     <bean id="TCPHandlerAkkaSystem" class="com.nmea.datasource.TCPHandlerAkkaSystem" />
 
+    <bean id="CodeManagerActorSystem" class="com.nmea.util.CodeManagerActorSystem"/>
+
 </beans>
